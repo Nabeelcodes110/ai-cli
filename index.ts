@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { Command } from "commander"
-import {commit } from "./commands/commit.js"
+import { commitFunction } from "./commands/commit.js"
 
 const program = new Command()
 
@@ -20,6 +20,8 @@ program.command("commit")
 .option("-d, --description <string>", "Description of the changes")
 .option("-m, --message <string>", "Commit message")
 .option("--mt, --message-template <string>", "Template for the commit message")
-.action((options: CommitOptions) => commit(options))
+.action(async ({description, message, messageTemplate}: CommitOptions) => {
+    await commitFunction({description, message, messageTemplate});
+})
 
 program.parse()

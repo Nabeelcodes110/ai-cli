@@ -2,7 +2,8 @@ import { CommitOptions } from "../index.js";
 import { generateCommitMessage, generateCommitMessageByDescription } from "../utils/generateCommit.js";
 import { execa } from "execa";
 
-export const commit = async ({description, message, messageTemplate} : CommitOptions) => {
+export const commitFunction = async ({description, message, messageTemplate} : CommitOptions) => {
+    console.log("Staging changes...");
     execa("git", ["add", "."], { stdio: "inherit" });
     if (message) {
         console.log("Using provided commit message:", message);
