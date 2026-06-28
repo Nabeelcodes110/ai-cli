@@ -31,15 +31,17 @@ program.command("commit")
 program.command("review")
     .description("AI code review on git diff")
     .option("-s, --staged", "Review only staged changes")
-    .action(async (options: { staged?: boolean }) => {
+    .option("-p, --print", "Print review to stdout instead of saving a report")
+    .action(async (options: { staged?: boolean; print?: boolean }) => {
         await reviewFunction(options);
     });
 
 program.command("explain")
     .description("Explain a source file using AI")
     .argument("<file>", "Path to the file to explain")
-    .action(async (file: string) => {
-        await explainFunction(file);
+    .option("-p, --print", "Print explanation to stdout instead of saving a report")
+    .action(async (file: string, options: { print?: boolean }) => {
+        await explainFunction(file, options);
     });
 
 program.command("test")

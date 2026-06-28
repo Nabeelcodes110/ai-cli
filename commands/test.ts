@@ -44,7 +44,7 @@ Requirements:
 Source (${sourceLabel}):
 ${file ? `\`\`\`\n${sourceContent}\n\`\`\`` : sourceContent}`;
 
-    const tests = await generateWithAI(prompt);
+    const tests = await generateWithAI(prompt, 2000);
 
     if (output) {
         await writeFile(output, tests, "utf-8");

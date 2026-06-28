@@ -2,8 +2,16 @@ import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
 import chalk from "chalk";
 import { generateWithAI } from "../utils/ai.js";
+import { printToStdout, writeReport } from "../utils/output.js";
 
-export const explainFunction = async (filePath: string) => {
+export type ExplainOptions = {
+    print?: boolean;
+};
+
+export const explainFunction = async (
+    filePath: string,
+    { print }: ExplainOptions = {},
+) => {
     let content: string;
     try {
         content = await readFile(filePath, "utf-8");
@@ -13,15 +21,16 @@ export const explainFunction = async (filePath: string) => {
     }
 
     const fileName = basename(filePath);
-    console.log(chalk.blue(`Explaining ${fileName}...\n`));
+    console.log(chalk.blue(`Explaining ${fileName}...`));
 
-    const prompt = `Explain the following code file in clear, accessible language.
+    const prompt = `Explain the following code file briefly and clearly.
 
-Cover:
-- What the file does overall
-- Key functions, classes, or exports and their purpose
-- How the pieces fit together
-- Any notable patterns or dependencies
+Cover only:
+- What the file does
+- Key functions, classes, or exports
+- How the main pieces connect
+
+Use short paragraphs and bullet points. Be specific, not vague.
 
 File: ${fileName}
 
@@ -29,6 +38,17 @@ File: ${fileName}
 ${content}
 \`\`\``;
 
-    const explanation = await generateWithAI(prompt);
-    console.log(explanation);
+    const explanation = await generateWithAI(prompt, 300);
+
+    if (print) {
+        printToStdout(explanation);
+        return;
+    }
+
+    const safeName = fileName.replace(/[^\w.-]+/g, "-");
+    await writeReport({
+        filename: `explain-${safeName}.md`,
+        title: `Explanation: ${fileName}`,
+        body: explanation,
+    });
 };

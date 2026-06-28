@@ -21,14 +21,16 @@ program.command("commit")
 program.command("review")
     .description("AI code review on git diff")
     .option("-s, --staged", "Review only staged changes")
+    .option("-p, --print", "Print review to stdout instead of saving a report")
     .action(async (options) => {
     await reviewFunction(options);
 });
 program.command("explain")
     .description("Explain a source file using AI")
     .argument("<file>", "Path to the file to explain")
-    .action(async (file) => {
-    await explainFunction(file);
+    .option("-p, --print", "Print explanation to stdout instead of saving a report")
+    .action(async (file, options) => {
+    await explainFunction(file, options);
 });
 program.command("test")
     .description("Generate unit tests using AI")

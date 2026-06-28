@@ -42,18 +42,28 @@ Get an API key from the [OpenAI platform](https://platform.openai.com/api-keys).
 
 ### Review changes
 
+Saves a markdown report to `.ai-cli/review.md`.
+
 ```bash
-# Review all uncommitted changes
+re# Review all uncommitted changes
 ai-cli review
 
 # Review only staged changes
 ai-cli review --staged
+
+# Print to stdout instead of saving a report
+ai-cli review --print
 ```
 
 ### Explain a file
 
+Saves a markdown report to `.ai-cli/explain-<filename>.md`.
+
 ```bash
 ai-cli explain src/utils/parser.ts
+
+# Print to stdout instead
+ai-cli explain src/utils/parser.ts --print
 ```
 
 ### Generate unit tests
